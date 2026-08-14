@@ -24,7 +24,10 @@
                     <h1 class="header__title">Bảng tuần hoàn hóa học</h1>
                     <p class="header__subtitle">118 nguyên tố hóa học</p>
                 </div>
-                <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Chuyển sang chế độ tối">🌙</button>
+                <div class="header__actions">
+                    <a class="learn-link" href="#hoc-nhanh">🧠 Học nhanh</a>
+                    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Chuyển sang chế độ tối">🌙</button>
+                </div>
             </div>
 
             <div class="toolbar">
@@ -50,15 +53,65 @@
     <main class="main">
         <div class="container">
             <p id="search-no-result" class="search-no-result" hidden>Không tìm thấy nguyên tố phù hợp.</p>
-            <p class="table-scroll-hint">← Vuốt ngang để xem toàn bộ bảng →</p>
-            <div class="table-scroll">
-                <div id="table" class="table"></div>
-            </div>
+            <div id="periodic-view" class="periodic-view"></div>
             <div class="series-note">
                 <span class="series-note__item"><span class="series-note__swatch cat-lanthanide"></span>Họ Lantan (57–71)</span>
                 <span class="series-note__item"><span class="series-note__swatch cat-actinide"></span>Họ Actini (89–103)</span>
             </div>
             <div id="legend" class="legend" hidden></div>
+
+            <section id="hoc-nhanh" class="learn" hidden aria-labelledby="learn-title">
+                <div class="learn__heading">
+                    <h2 id="learn-title" class="learn__title">🧠 Học nhanh bảng tuần hoàn</h2>
+                    <p class="learn__subtitle">Hiểu cấu trúc, học theo nhóm và ghi nhớ bảng tuần hoàn dễ hơn.</p>
+                </div>
+
+                <div class="learn__grid">
+                    <article class="learn__card learn__card--full">
+                        <h3 class="learn__card-title">1. Hiểu cấu trúc bảng</h3>
+                        <ul class="learn__bullets learn__bullets--grid">
+                            <li><strong>Hàng ngang = Chu kỳ.</strong> Nguyên tố cùng chu kỳ có cùng số lớp electron.</li>
+                            <li><strong>Cột dọc = Nhóm.</strong> Nguyên tố cùng nhóm xếp thẳng hàng.</li>
+                            <li><strong>Nguyên tố cùng nhóm</strong> thường có tính chất gần giống nhau.</li>
+                            <li><strong>Màu sắc</strong> giúp phân biệt các loại nguyên tố.</li>
+                        </ul>
+                    </article>
+
+                    <article class="learn__card learn__card--full">
+                        <h3 class="learn__card-title">2. Học theo nhóm</h3>
+                        <p class="learn__lead">Không cần học 118 nguyên tố cùng lúc. Bắt đầu từ những nhóm quan trọng nhất:</p>
+                        <div id="learn-groups" class="learn__groups"></div>
+                    </article>
+
+                    <article class="learn__card learn__card--full">
+                        <h3 class="learn__card-title">3. Nguyên tố thường gặp</h3>
+                        <p class="learn__lead">Bắt đầu với những nguyên tố xuất hiện nhiều trong cuộc sống. Click vào để xem chi tiết:</p>
+                        <div id="learn-common" class="learn__common"></div>
+                    </article>
+
+                    <article class="learn__card">
+                        <h3 class="learn__card-title">4. Lộ trình ghi nhớ</h3>
+                        <ol class="learn__steps">
+                            <li><span class="learn__step-num">1</span><span>Nhớ ký hiệu hóa học.</span></li>
+                            <li><span class="learn__step-num">2</span><span>Nhớ tên nguyên tố.</span></li>
+                            <li><span class="learn__step-num">3</span><span>Nhớ nhóm / chu kỳ.</span></li>
+                            <li><span class="learn__step-num">4</span><span>Tự kiểm tra lại bằng bảng tuần hoàn.</span></li>
+                        </ol>
+                        <p class="learn__advice">💡 Không cần học 118 nguyên tố trong một lần. Hãy chia nhỏ và ôn lại thường xuyên.</p>
+                    </article>
+
+                    <article class="learn__card">
+                        <h3 class="learn__card-title">5. Mẹo học hiệu quả</h3>
+                        <ul class="learn__bullets">
+                            <li>Học khoảng <strong>5–10 nguyên tố</strong> mỗi lần.</li>
+                            <li>Học các nguyên tố <strong>cùng nhóm</strong>.</li>
+                            <li>Nhìn ký hiệu rồi <strong>tự đoán tên</strong>.</li>
+                            <li><strong>Click vào nguyên tố</strong> để kiểm tra.</li>
+                            <li>Ôn lại nhiều lần thay vì <strong>học dồn</strong>.</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
 
             <div id="error-message" class="error-message" hidden>
                 <p class="error-message__text">Không thể tải dữ liệu bảng tuần hoàn. Vui lòng thử lại.</p>

@@ -18,7 +18,7 @@ function prefersReducedMotion() {
 }
 
 function getCells() {
-    return refs.table ? [...refs.table.querySelectorAll(".element")] : [];
+    return refs.view ? [...refs.view.querySelectorAll(".element")] : [];
 }
 
 function computeMatches(cells, query) {
@@ -121,7 +121,7 @@ export function applyFilters() {
         exactCell.scrollIntoView({
             behavior: prefersReducedMotion() ? "auto" : "smooth",
             block: "center",
-            inline: "center",
+            inline: "nearest",
         });
     }
     lastQuery = query;
@@ -171,7 +171,7 @@ function wireToolbar() {
     refs.blockSelect = document.getElementById("block-filter");
     refs.resetButton = document.getElementById("reset-filters");
     refs.noResult = document.getElementById("search-no-result");
-    refs.table = document.getElementById("table");
+    refs.view = document.getElementById("periodic-view");
     refs.legend = document.getElementById("legend");
 
     refs.searchInput.addEventListener("input", () => {
