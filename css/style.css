@@ -543,15 +543,20 @@ button:focus-visible {
 
 /* Modal chi tiết nguyên tố */
 .element-dialog {
-    position: relative;
+    position: fixed;
+    inset: 0;
+    margin: auto;
     width: min(720px, calc(100vw - 32px));
-    max-height: 90vh;
+    max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 16px);
+    max-height: calc(100dvh - 16px);
     padding: 0;
     border: 1px solid var(--card-border);
     border-radius: var(--radius-lg);
     background-color: var(--card-bg);
     color: var(--text);
     box-shadow: var(--shadow-lg);
+    overscroll-behavior: contain;
 }
 
 .element-dialog::backdrop {
@@ -613,8 +618,10 @@ button:focus-visible {
 }
 
 .dialog__content {
-    max-height: calc(90vh - 2px);
+    max-height: calc(100vh - 16px);
+    max-height: calc(100dvh - 16px);
     overflow-y: auto;
+    overscroll-behavior: contain;
     border-radius: var(--radius-lg);
 }
 
@@ -1303,9 +1310,10 @@ select.toolbar__field {
 
     /* Modal near fullscreen */
     .element-dialog {
-        width: calc(100vw - 12px);
-        max-width: calc(100vw - 12px);
-        max-height: 92vh;
+        width: calc(100vw - 16px);
+        max-width: calc(100vw - 16px);
+        max-height: calc(100vh - 16px);
+        max-height: calc(100dvh - 16px);
         margin: auto;
     }
 
@@ -1358,7 +1366,8 @@ select.toolbar__field {
     }
 
     .dialog__content {
-        max-height: calc(92vh - 2px);
+        max-height: calc(100vh - 16px);
+        max-height: calc(100dvh - 16px);
     }
 
     /* Học nhanh */

@@ -320,7 +320,11 @@ export function openElementDetails(element) {
         return;
     }
     renderElement(element);
+    content.scrollTop = 0;
     dialog.showModal();
+    requestAnimationFrame(() => {
+        content.scrollTop = 0;
+    });
 }
 
 if (dialog && closeButton) {
