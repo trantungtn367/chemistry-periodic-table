@@ -387,6 +387,7 @@ body {
     .element--card,
     .learn-chip,
     .learn-link,
+    .speak-button,
     .learn__steps li {
         transition: none !important;
     }
@@ -670,6 +671,44 @@ button:focus-visible {
     font-size: 1.6rem;
     font-weight: 800;
     overflow-wrap: anywhere;
+}
+
+.element-header__name-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-width: 0;
+}
+
+.speak-button {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    font-size: 1.15rem;
+    line-height: 1;
+    color: var(--text);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: var(--shadow-xs);
+    transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+}
+
+.speak-button:hover {
+    border-color: var(--primary);
+    transform: translateY(-1px) scale(1.05);
+    box-shadow: var(--shadow-sm);
+    background-color: color-mix(in srgb, var(--surface) 85%, var(--primary) 15%);
+}
+
+.speak-button:active {
+    transform: scale(0.92);
 }
 
 .element-header__number {

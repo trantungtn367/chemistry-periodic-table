@@ -1,4 +1,5 @@
 import { getCategoryClass, CATEGORY_LABELS } from "./categories.js";
+import { speakElementName, cancelSpeech, isSpeechSupported } from "./pronunciation.js";
 
 const PHASE_LABELS = {
     Solid: "Rắn",
@@ -206,6 +207,23 @@ function createMedia(element) {
     return wrapper;
 }
 
+function createSpeakButton(name) {
+    if (!isSpeechSupported()) {
+        return null;
+    }
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "speak-button";
+    button.textContent = "🔊";
+    button.title = "Nghe phát âm";
+    button.setAttribute("aria-label", `Nghe phát âm ${name}`);
+    button.addEventListener("click", () => {
+        speakElementName(name);
+    });
+    return button;
+}
+
 function renderElement(element) {
     content.replaceChildren();
     content.className = `dialog__content ${getCategoryClass(element.category)}`;
@@ -220,16 +238,25 @@ function renderElement(element) {
     const headerInfo = document.createElement("div");
     headerInfo.className = "element-header__info";
 
+    const nameRow = document.createElement("div");
+    nameRow.className = "element-header__name-row";
+
     const name = document.createElement("h2");
     name.id = "element-dialog-title";
     name.className = "element-header__name";
     name.textContent = element.name;
+    nameRow.appendChild(name);
+
+    const speakButton = createSpeakButton(element.name);
+    if (speakButton) {
+        nameRow.appendChild(speakButton);
+    }
 
     const numberLine = document.createElement("p");
     numberLine.className = "element-header__number";
     numberLine.textContent = `Số hiệu nguyên tử: ${element.number}`;
 
-    headerInfo.append(name, numberLine);
+    headerInfo.append(nameRow, numberLine);
     header.append(symbol, headerInfo);
     content.appendChild(header);
 
@@ -334,4 +361,5 @@ if (dialog && closeButton) {
             dialog.close();
         }
     });
+    dialog.addEventListener("close", cancelSpeech);
 }
