@@ -136,6 +136,136 @@ function addIonization(list, energies) {
     list.appendChild(row);
 }
 
+function parseAttribution(attribution) {
+    if (!hasValue(attribution)) {
+        return null;
+    }
+
+    let text = String(attribution).trim();
+    if (text === "") {
+        return null;
+    }
+
+    let sourceUrl = null;
+    let source = null;
+
+    const sourceMatch = text.match(/source\s*:\s*([^\s,;]+)/i);
+    if (sourceMatch) {
+        sourceUrl = sourceMatch[1];
+        text = text.replace(/source\s*:\s*[^\s,;]+/i, "");
+    }
+
+    text = text.replace(/<[^>]+>/g, "");
+    text = text.replace(/\bhttps?:\/\/[^\s,;]+/gi, "");
+
+    if (/\bvia\s+Wikimedia\s+Commons\b/i.test(text)) {
+        source = "Wikimedia Commons";
+        text = text.replace(/\bvia\s+Wikimedia\s+Commons\b/i, "");
+    }
+
+    let license = null;
+
+    const ccUnported = text.match(/Creative\s+Commons\s+Attribution(?:-ShareAlike)?\s+(\d+(?:\.\d+)?)\s+Unported\s+License/i);
+    if (ccUnported) {
+        const shareAlike = /Creative\s+Commons\s+Attribution-ShareAlike/i.test(text);
+        license = `CC BY${shareAlike ? "-SA" : ""} ${ccUnported[1]}`;
+        text = text.replace(/under\s+a\s+Creative\s+Commons\s+Attribution(?:-ShareAlike)?\s+\d+(?:\.\d+)?\s+Unported\s+License/i, "");
+    }
+
+    if (!license) {
+        const licenseMatch = text.match(/\b(CC\s+BY(?:\s*[-–]\s*[A-Z]+)*[\s-]*\d+(?:\.\d+)?|Public\s+domain|Attribution|GFDL|CC0)\b/i);
+        if (licenseMatch) {
+            license = licenseMatch[0];
+            text = text.replace(licenseMatch[0], "");
+        }
+    }
+
+    let author = text;
+    if (author) {
+        author = author.replace(/^[^:]+\.(?:jpe?g|png|gif)\s*:\s*/i, "");
+        author = author.replace(/User\s*:\s*/i, "");
+        author = author.replace(/\s+Contact\s+email\s*:\s*\S+/gi, "");
+        author = author.replace(/Touched\s+up\s+by\s+[^,]+/i, "");
+
+        const quoted = author.match(/'([^']+)'/);
+        if (quoted) {
+            author = quoted[1];
+        } else {
+            const derivative = author.match(/derivative\s+work\s*:\s*([^,]+)/i);
+            if (derivative) {
+                author = derivative[1];
+            }
+        }
+
+        author = author.replace(/^[\s,;:'"]+|[\s,;:'"]+$/g, "");
+        author = author.replace(/\s{2,}/g, " ").trim();
+        author = author.replace(/(unknown\s+author)\1+/i, "$1");
+    }
+
+    if (!author || /^(unknown\s+author|unknown)$/i.test(author.trim())) {
+        author = null;
+    }
+
+    if (!license && !author && !source && !sourceUrl) {
+        return null;
+    }
+
+    if (!source && sourceUrl) {
+        try {
+            source = new URL(sourceUrl).hostname.replace(/^www\./, "");
+        } catch {
+            source = null;
+        }
+    }
+
+    return { author, license, source, sourceUrl };
+}
+
+function buildAttribution(attribution) {
+    const parsed = parseAttribution(attribution);
+    if (!parsed) {
+        return null;
+    }
+
+    const span = document.createElement("span");
+    span.className = "media-figure__attribution";
+
+    const textParts = [];
+    if (parsed.author) {
+        textParts.push(`© ${parsed.author}`);
+    }
+    if (parsed.license) {
+        textParts.push(parsed.license);
+    }
+
+    if (textParts.length > 0) {
+        span.appendChild(document.createTextNode(textParts.join(" · ")));
+        if (parsed.source) {
+            span.appendChild(document.createTextNode(" · "));
+        }
+    }
+
+    if (parsed.source) {
+        const linkable = parsed.source !== "Wikimedia Commons" && parsed.sourceUrl;
+        if (linkable) {
+            const link = document.createElement("a");
+            link.className = "media-figure__attribution-link";
+            link.href = parsed.sourceUrl;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.textContent = parsed.source;
+            span.appendChild(link);
+        } else {
+            span.appendChild(document.createTextNode(parsed.source));
+        }
+    }
+
+    if (span.childNodes.length === 0) {
+        return null;
+    }
+    return span;
+}
+
 function createFigure(src, alt, caption, attribution, element) {
     const figure = document.createElement("figure");
     figure.className = "media-figure";
@@ -159,10 +289,8 @@ function createFigure(src, alt, caption, attribution, element) {
     const figcaption = document.createElement("figcaption");
     figcaption.className = "media-figure__caption";
     figcaption.textContent = caption;
-    if (hasValue(attribution)) {
-        const attr = document.createElement("span");
-        attr.className = "media-figure__attribution";
-        attr.textContent = attribution;
+    const attr = buildAttribution(attribution);
+    if (attr) {
         figcaption.append(document.createElement("br"), attr);
     }
     figure.appendChild(figcaption);

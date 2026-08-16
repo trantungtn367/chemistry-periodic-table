@@ -764,6 +764,17 @@ button:focus-visible {
     margin-top: 2px;
     font-size: 0.7rem;
     opacity: 0.85;
+    overflow-wrap: anywhere;
+}
+
+.media-figure__attribution-link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.media-figure__attribution-link:hover {
+    color: var(--primary);
 }
 
 .dialog-section {
